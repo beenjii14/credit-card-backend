@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const { app, server } = require('../src');
 const faker = require('faker');
 
+const Card = require('../src/models/creditCard');
+
 const api = supertest(app);
 
 const dataSend = {
@@ -14,6 +16,9 @@ const dataSend = {
 let idCard = null;
 
 describe('Testing for credit card', () => {
+  beforeAll(async () => {
+    await Card.deleteMany({});
+  });
   afterAll(() => {
     server.close();
     mongoose.connection.close();
@@ -27,6 +32,18 @@ describe('Testing for credit card', () => {
       .send(dataSend)
       .end((error, response) => {
         idCard = response.body.data._id;
+        done();
+      });
+  });
+
+  test('should get card list', done => {
+    api.get(`/api/v1/card`)
+      .expect(200)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /application\/json/)
+      .end((error, response) => {
+        const records = response.body.data.records;
+        expect(records).toHaveLength(1);
         done();
       });
   });

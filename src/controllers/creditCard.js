@@ -92,6 +92,36 @@ const getCard = (req, res) => {
   });
 }
 
+const getListCard = (req, res) => {
+  async.auto({
+    getListCards: cb => {
+      Card.find({ deleted: false }).then(response => {
+          cb(null, response);
+      }).catch(() => cb({ code: 500, error: true, message: messages.es.query }));
+    },
+    pagination: cb => {
+      // TODO: Create pagination
+      cb();
+    }
+  }, 1, (error, response) => {
+    if (!error) {
+      res.status(200).send({
+        code: 200,
+        error: false,
+        message: null,
+        data: {
+          records: response.getListCards
+        }
+      });
+    } else {
+      res.status(error.code).send({
+        ...error,
+        data: {}
+      });
+    }
+  });
+}
+
 const deleteCard = (req, res) => {
   const { id } = req.params;
   async.auto({
@@ -103,7 +133,8 @@ const deleteCard = (req, res) => {
       }
     },
     deleteCard: cb => {
-      Card.findByIdAndDelete(id).then(response => {
+      // Make logical delete
+      Card.findByIdAndUpdate(id, { deleted: true }).then(response => {
         if (get(response, '_id')) {
           cb();
         } else {
@@ -131,5 +162,6 @@ const deleteCard = (req, res) => {
 module.exports = {
   createCard,
   getCard,
+  getListCard,
   deleteCard
 };

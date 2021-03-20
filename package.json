@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "NODE_ENV=development nodemon src/index.js --exec babel-node",
     "start": "NODE_ENV=production node index.js",
-    "test": "NODE_ENV=test jest --verbose --silent",
+    "test": "NODE_ENV=test jest --verbose",
     "test:watch": "npm run test -- --watch",
     "lint": "eslint . --ext .js"
   },
