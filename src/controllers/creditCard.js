@@ -1,6 +1,5 @@
 const async = require('async');
 const get = require('lodash.get');
-const uuid = require('uuid');
 const Card = require('../models/creditCard');
 const { messages } = require('../messages');
 
@@ -28,7 +27,6 @@ const createCard = (req, res) => {
     },
     saveCreditCard: cb => {
       Card.create({
-        _id: uuid.v4(),
         number: cardNumber,
         name: cardName,
         cvv,
@@ -41,8 +39,8 @@ const createCard = (req, res) => {
     }
   }, 1, (error, response) => {
     if (!error) {
-      res.status(200).send({
-        code: 200,
+      res.status(201).send({
+        code: 201,
         error: false,
         message: messages.es.card.success,
         data: response.saveCreditCard
@@ -57,6 +55,81 @@ const createCard = (req, res) => {
   });
 }
 
+const getCard = (req, res) => {
+  const { id } = req.params;
+
+  async.auto({
+    validateId: cb => {
+      if (id && id !== '') {
+        cb();
+      } else {
+        cb({ error: true, message: messages.es.query });
+      }
+    },
+    getDataCard: cb => {
+      Card.findById(id).then(response => {
+        if (get(response, '_id')) {
+          cb(null, response);
+        } else {
+          cb({ code: 404, error: true, message: messages.es.card.notFound });
+        }
+      }).catch(() => cb({ code: 500, error: true, message: messages.es.query }));
+    }
+  }, 1, (error, response) => {
+    if (!error) {
+      res.status(200).send({
+        code: 200,
+        error: false,
+        message: null,
+        data: response.getDataCard
+      });
+    } else {
+      res.status(error.code).send({
+        ...error,
+        data: {}
+      });
+    }
+  });
+}
+
+const deleteCard = (req, res) => {
+  const { id } = req.params;
+  async.auto({
+    validateId: cb => {
+      if (id && id !== '') {
+        cb();
+      } else {
+        cb({ error: true, message: messages.es.query });
+      }
+    },
+    deleteCard: cb => {
+      Card.findByIdAndDelete(id).then(response => {
+        if (get(response, '_id')) {
+          cb();
+        } else {
+          cb({ code: 404, error: true, message: messages.es.card.notFound });
+        }
+      }).catch(() => cb({ code: 500, error: true, message: messages.es.query }));
+    }
+  }, 1, (error) => {
+    if (!error) {
+      res.status(200).send({
+        code: 200,
+        error: false,
+        message: messages.es.card.deleted,
+        data: {}
+      });
+    } else {
+      res.status(error.code).send({
+        ...error,
+        data: {}
+      });
+    }
+  });
+}
+
 module.exports = {
-  createCard
+  createCard,
+  getCard,
+  deleteCard
 };

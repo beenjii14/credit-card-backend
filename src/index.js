@@ -1,7 +1,7 @@
+require('./mongodb');
 import express from 'express';
 const cors = require('cors');
 const logger = require('morgan');
-const mongoose = require('mongoose');
 const app = express();
 
 const routes = require('./routes');
@@ -17,22 +17,15 @@ app.use(cors());
 app.use(express.json());
 
 // track requests in production and development only
-if (global.env !== 'test') {
+if (process.env.NODE_ENV !== 'test') {
   app.use(logger('dev'));
 }
 
 // import all routes
 routes(app);
 
-// connect databse MongoDB
-mongoose.connect(config.db, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-}).then(() => {
-  app.listen(config.port, () => {
-    console.log(`Escuchando en el puerto ${config.port} `);
-  });
-}).catch(error => {
-  console.log(`No se pudo conectar a la BD ${error}`);
+const server = app.listen(config.port, () => {
+  console.log(`Escuchando en el puerto ${config.port} `);
 });
+
+module.exports = { app, server };

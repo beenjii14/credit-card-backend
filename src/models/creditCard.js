@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
 
 const cardSchema = new Schema({
-  _id: { type: String },
   number: { type: String, required: true },
   name: { type: String, required: true },
   cvv: { type: String, required: true },
@@ -11,8 +10,8 @@ const cardSchema = new Schema({
   deleted: { type: Boolean, default: false },
   created: { type: Number, default: ~~(new Date().getTime() / 1e3) },
   updated: { type: Number, default: ~~(new Date().getTime() / 1e3) }
-}, { timestamps: false, _id: false });
+}, { timestamps: false, _id: true });
 
-const modelCard = model('card', cardSchema, 'card');
+const ModelCard = model('card', cardSchema);
 
-module.exports = modelCard;
+module.exports = ModelCard;
