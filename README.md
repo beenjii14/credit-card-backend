@@ -1,5 +1,7 @@
 # Backend credit card
 
+[Production link](https://credit-card-clip.azurewebsites.net)
+
 ## Prerequisites
 
 To run this sample you will need the following:
@@ -15,7 +17,7 @@ To run this sample you will need the following:
 
 **NOTE:** If you decide to push new local connections to the development environment, the MongoDB installation step is assumed to be mandatory and must be run locally on your machine when running the application.
 
-## Download the Sample application and modules
+## Download the sample application and modules
 
 Next, clone the sample repo and install the NPM.
 
