@@ -1,4 +1,4 @@
-export const messages = {
+const messages = {
   "es": {
     "required": 'Hacen faltan campos requeridos',
     "query": 'Ha fallado al realizar la consulta',
@@ -20,3 +20,5 @@ export const messages = {
     }
   }
 }
+
+module.exports = messages;

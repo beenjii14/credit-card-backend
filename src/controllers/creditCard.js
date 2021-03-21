@@ -1,7 +1,7 @@
 const async = require('async');
 const get = require('lodash.get');
 const Card = require('../models/creditCard');
-const { messages } = require('../messages');
+const messages = require('../messages');
 
 const createCard = (req, res) => {
   const { cardNumber, cardName, cvv, expiration } = req.body;
