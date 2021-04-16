@@ -1,6 +1,8 @@
 # Backend credit card
 
-[Production link](https://credit-card-clip.azurewebsites.net)
+[Production link Azure](https://credit-card-clip.azurewebsites.net)
+
+[Production link Heroku](https://credit-card-beenjii14.herokuapp.com)
 
 ## Prerequisites
 
@@ -47,7 +49,7 @@ npm run dev
 
 ## All ready to use the application
 
-> You will have a server successfully running on `http://localhost:<PORT>`.  
+> You will have a server successfully running on `http://localhost:<PORT>`.
 > The service will be available at `http://localhost:<PORT>/api/v1/`.
 
 ## Cards services
